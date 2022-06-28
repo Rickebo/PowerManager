@@ -6,17 +6,52 @@ using System.Windows.Forms;
 
 public class TrayIcon
 {
-    private Thread _uiThread;
+    /// <summary>
+    /// The thread running the UI, or the NotifyIcon
+    /// </summary>
+    private readonly Thread _uiThread;
+
+    /// <summary>
+    /// The scheme collection used to find the currently active power plan
+    /// </summary>
     private readonly PowerSchemeCollection _schemeCollection;
     
+    /// <summary>
+    /// The tool strip menu item showing the currently active power plan
+    /// </summary>
     private ToolStripMenuItem ActivePlanItem { get; set; }
+
+    /// <summary>
+    /// The tool strip menu item representing opening the config file
+    /// </summary>
     private ToolStripMenuItem OpenConfigItem { get; set; }
+
+    /// <summary>
+    /// The tool strip menu item representing exiting the application
+    /// </summary>
     private ToolStripMenuItem ExitItem { get; set; }
+
+    /// <summary>
+    /// The tool strip menu item representing toggling whether or not the application
+    /// starts with Windows
+    /// </summary>
     private ToolStripMenuItem AutoStartItem { get; set; }
+
+    /// <summary>
+    /// The tool strip menu item representing closing the context menu
+    /// </summary>
     private ToolStripMenuItem CloseMenuItem { get; set; }
+
+    /// <summary>
+    /// The tool strip menu item representing restarting the application
+    /// </summary>
     private ToolStripMenuItem RestartItem { get; set; }
     
     
+    /// <summary>
+    /// Initializes the tray icon and runs it in another thread
+    /// </summary>
+    /// <param name="schemeCollection"></param>
     public TrayIcon(PowerSchemeCollection schemeCollection)
     {
         _schemeCollection = schemeCollection;
@@ -25,6 +60,9 @@ public class TrayIcon
         _uiThread.Start();
     }
 
+    /// <summary>
+    /// Initializes and runs the notify icon used for the tray icon
+    /// </summary>
     private void Run()
     {
         var icon = new NotifyIcon();
@@ -37,11 +75,16 @@ public class TrayIcon
         Application.Run();
     }
 
+    /// <summary>
+    /// Create a context menu for the tray icon
+    /// </summary>
+    /// <returns>The newly created context menu</returns>
     private ContextMenuStrip CreateContextMenu()
     {
-        var menu = new ContextMenuStrip();
-        
-        menu.Text = "PowerManager";
+        var menu = new ContextMenuStrip()
+        { 
+            Text = "PowerManager"
+        };
 
         OpenConfigItem = new ToolStripMenuItem()
         {
@@ -57,21 +100,24 @@ public class TrayIcon
 
         ExitItem.Click += (s, a) => Environment.Exit(0);
 
-        ActivePlanItem = new ToolStripMenuItem();
-        AutoStartItem = new ToolStripMenuItem();
         CloseMenuItem = new ToolStripMenuItem()
         {
             Text = "Close this menu"
         };
+
         RestartItem = new ToolStripMenuItem()
         {
             Text = "Restart PowerManager"
         };
+
         RestartItem.Click += (s, a) => Restart();
         
-        UpdateAll();
-
+        ActivePlanItem = new ToolStripMenuItem();
+        
+        AutoStartItem = new ToolStripMenuItem();
         AutoStartItem.Click += (s, a) => ToggleAutoStart();
+
+        UpdateAll();
         
         menu.Items.AddRange(new []
         {
@@ -86,6 +132,9 @@ public class TrayIcon
         return menu;
     }
 
+    /// <summary>
+    /// Toggles whether the application starts with Windows or not
+    /// </summary>
     private void ToggleAutoStart()
     {
         var isAutoStart = IsAutoLaunch;
@@ -98,6 +147,9 @@ public class TrayIcon
         UpdateAutoStart();
     }
 
+    /// <summary>
+    /// Updates the auto start tool strip menu item
+    /// </summary>
     private void UpdateAutoStart()
     {
         AutoStartItem.Text = IsAutoLaunch 
@@ -105,34 +157,58 @@ public class TrayIcon
             : "Start with windows";
     }
     
+    /// <summary>
+    /// Updates the active power plan tool strip menu item
+    /// </summary>
     private void UpdateActivePowerPlan()
     {
         ActivePlanItem.Text = $"Active power plan: {_schemeCollection.GetActive().Name}";
     }
 
+    /// <summary>
+    /// Updates all updateable tool strip menu items
+    /// </summary>
     private void UpdateAll()
     {
         UpdateActivePowerPlan();
         UpdateAutoStart();
     }
 
+    /// <summary>
+    /// Restarts the application
+    /// </summary>
     private void Restart()
     {
         Application.Restart();
         Environment.Exit(0);
     }
     
+    /// <summary>
+    /// The registry key to use for the application when setting it to start with windows
+    /// </summary>
     private const string PowerManagerRegistryKey = "PowerManager";
     
+    /// <summary>
+    /// Finds the registry key containing programs to start with windows
+    /// </summary>
+    /// <returns></returns>
     private static RegistryKey GetStartupKey() => 
         Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
+    /// <summary>
+    /// Whether or not the program is set to automatically launch with windows
+    /// </summary>
     public bool IsAutoLaunch => GetStartupKey().GetValue(PowerManagerRegistryKey) != null;
 
+    /// <summary>
+    /// Enables launching the program automatically with Windows
+    /// </summary>
     public void EnableAutoLaunch() => GetStartupKey()
         .SetValue(PowerManagerRegistryKey, Application.ExecutablePath);
     
-    
+    /// <summary>
+    /// Disables launching the program automatically with Windows
+    /// </summary>
     public void DisableAutoLaunch() => GetStartupKey()
         .DeleteValue(PowerManagerRegistryKey, false);
 }
