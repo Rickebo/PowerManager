@@ -20,6 +20,35 @@ var performanceScheme = plans.GetScheme(settings.PerformancePlan);
 // Find the power plan to use for idling
 var idleScheme = plans.GetScheme(settings.IdlePlan);
 
+if (performanceScheme == null)
+{
+    MessageBox.Show($"Could not find the performance power plan specified in settings as\n" +
+                    $"\"{settings.PerformancePlan}\", make sure it matches the name of the\n" +
+                    $"high performance plan that you see in Windows power plan settings exactly.\n\n" +
+                    $"Once you have found the correct name, update the contents of the config file located at:\n" +
+                    Settings.SettingsFile,
+        "Could not find specified power plan",
+        MessageBoxButtons.OK,
+        MessageBoxIcon.Exclamation);
+
+    return;
+}
+
+if (idleScheme == null)
+{
+    MessageBox.Show($"Could not find the idle power plan specified in settings as\n" +
+                    $"\"{settings.IdlePlan}\", make sure it matches the name of the\n" +
+                    $"balanced plan (or whatever plan you want to use) that you see in " +
+                    $"Windows power plan settings exactly.\n\n" +
+                    $"Once you have found the correct name, update the contents of the config file located at:\n" +
+                    Settings.SettingsFile,
+        "Could not find specified power plan",
+        MessageBoxButtons.OK,
+        MessageBoxIcon.Exclamation);
+
+    return;
+}
+
 // Create a tray icon with context menu
 var trayIcon = new TrayIcon(plans);
 

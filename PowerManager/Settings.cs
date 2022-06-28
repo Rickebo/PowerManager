@@ -5,11 +5,11 @@ namespace PowerManager;
 
 public class Settings
 {
-    private static readonly string BasePath = Path.Combine(
+    public static string BasePath { get; }= Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
         "PowerManager");
     
-    private static readonly string SettingsFile = Path.Combine(BasePath, "settings.json");
+    public static string SettingsFile { get; } = Path.Combine(BasePath, "settings.json");
     
     /// <summary>
     /// The list of applications to apply the performance plan for

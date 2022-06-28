@@ -57,6 +57,6 @@ public class PowerSchemeCollection : Dictionary<Guid, PowerScheme>
     /// </summary>
     /// <param name="name">The name of the power plan to get</param>
     /// <returns></returns>
-    public PowerScheme GetScheme(string name) => 
-        Values.First(scheme => scheme.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+    public PowerScheme? GetScheme(string name) => 
+        Values.FirstOrDefault(scheme => scheme.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
 }
