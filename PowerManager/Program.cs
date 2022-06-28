@@ -54,6 +54,7 @@ void Update()
                 ? performanceScheme
                 : idleScheme;
 
+        plans.Update();
         // New plan is the same as the old plan, no need to set it as active 
         // again or to update the collection
         if (plans.ActiveGuid == preferredPlan.Guid)
