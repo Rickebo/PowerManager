@@ -9,11 +9,6 @@ var applicationsSet = new HashSet<string>(
     StringComparer.OrdinalIgnoreCase);
 
 
-var timer = new System.Timers.Timer()
-{
-    Interval = 1000,
-    Enabled = true
-};
 
 var plans = new PowerSchemeCollection();
 var performanceScheme = plans.GetScheme(settings.PerformancePlan);
@@ -22,6 +17,13 @@ var idleScheme = plans.GetScheme(settings.IdlePlan);
 var trayIcon = new TrayIcon(plans);
 
 var mutex = new Mutex();
+
+var timer = new System.Timers.Timer()
+{
+        Interval = settings.UpdateInterval,
+        Enabled = true
+};
+
 timer.Elapsed += (s, a) =>
 {
     if (!mutex.WaitOne(0))

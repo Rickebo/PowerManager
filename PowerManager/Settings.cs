@@ -14,6 +14,7 @@ public class Settings
     public List<string> Applications { get; set; }
     public string PerformancePlan { get; set; }
     public string IdlePlan { get; set; }
+    public int UpdateInterval { get; set; } = 2000;
 
     public static void OpenInEditor()
     {
