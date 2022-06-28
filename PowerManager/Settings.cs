@@ -11,11 +11,29 @@ public class Settings
     
     private static readonly string SettingsFile = Path.Combine(BasePath, "settings.json");
     
+    /// <summary>
+    /// The list of applications to apply the performance plan for
+    /// </summary>
     public List<string> Applications { get; set; }
+
+    /// <summary>
+    /// The plan to apply when an application from <param name="Applications">applications</param> is running.
+    /// </summary>
     public string PerformancePlan { get; set; }
+
+    /// <summary>
+    /// The plan to apply when no application from <param name="Applications">applications</param> is running.
+    /// </summary>
     public string IdlePlan { get; set; }
+
+    /// <summary>
+    /// How often the application should check running processes and update, in milliseconds
+    /// </summary>
     public int UpdateInterval { get; set; } = 2000;
 
+    /// <summary>
+    /// Opens the config file in the default .json editor
+    /// </summary>
     public static void OpenInEditor()
     {
         try
@@ -36,6 +54,9 @@ public class Settings
         }
     }
     
+    /// <summary>
+    /// Template settings to use as default
+    /// </summary>
     public static Settings TemplateSettings { get; } =
         new()
         {
@@ -47,10 +68,13 @@ public class Settings
             IdlePlan = "Balanced"
         };
 
+    /// <summary>
+    /// Sets up settings.
+    /// Reads settings from file if file exists, otherwise writes default settings to file and returns them
+    /// </summary>
+    /// <returns>The settings from file, or sometimes default settings</returns>
     public static Settings Setup()
     {
-        
-
         if (!Directory.Exists(BasePath))
             Directory.CreateDirectory(BasePath);
 
