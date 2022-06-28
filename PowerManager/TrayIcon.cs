@@ -14,6 +14,7 @@ public class TrayIcon
     private ToolStripMenuItem ExitItem { get; set; }
     private ToolStripMenuItem AutoStartItem { get; set; }
     private ToolStripMenuItem CloseMenuItem { get; set; }
+    private ToolStripMenuItem RestartItem { get; set; }
     
     
     public TrayIcon(PowerSchemeCollection schemeCollection)
@@ -62,6 +63,11 @@ public class TrayIcon
         {
             Text = "Close this menu"
         };
+        RestartItem = new ToolStripMenuItem()
+        {
+            Text = "Restart PowerManager"
+        };
+        RestartItem.Click += (s, a) => Restart();
         
         UpdateAll();
 
@@ -73,6 +79,7 @@ public class TrayIcon
             CloseMenuItem,
             OpenConfigItem,
             AutoStartItem, 
+            RestartItem,
             ExitItem
         });
 
@@ -109,6 +116,12 @@ public class TrayIcon
         UpdateAutoStart();
     }
 
+    private void Restart()
+    {
+        Application.Restart();
+        Environment.Exit(0);
+    }
+    
     private const string PowerManagerRegistryKey = "PowerManager";
     
     private static RegistryKey GetStartupKey() => 

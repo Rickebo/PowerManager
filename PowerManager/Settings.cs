@@ -43,7 +43,7 @@ public class Settings
                 "csgo"
             },
             PerformancePlan = "High performance",
-            IdlePlan = "Power saver"
+            IdlePlan = "Balanced"
         };
 
     public static Settings Setup()

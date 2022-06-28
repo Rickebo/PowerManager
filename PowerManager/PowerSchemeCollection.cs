@@ -34,5 +34,5 @@ public class PowerSchemeCollection : Dictionary<Guid, PowerScheme>
         this[ActiveGuid];
     
     public PowerScheme GetScheme(string name) => 
-        Values.First(scheme => scheme.Name == name);
+        Values.First(scheme => scheme.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
 }
