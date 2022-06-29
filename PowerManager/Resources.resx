@@ -121,4 +121,53 @@
   <data name="icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Settings_OpenInEditor_Error" xml:space="preserve">
+    <value>Failed to open config file in editor. Try opening the following file manually: 
+</value>
+  </data>
+  <data name="Settings_OpenInEditor_Error_Title" xml:space="preserve">
+    <value>Failed to open editor</value>
+  </data>
+  <data name="Settings_Setup_NotFound" xml:space="preserve">
+    <value>Found no valid settings, wrote template ones to file.</value>
+  </data>
+  <data name="Settings_Default_Application" xml:space="preserve">
+    <value>csgo,bf4,TslGame,bf5,bf1,bf2042,dayz,Rust</value>
+  </data>
+  <data name="Settings_Default_PerformanceGuid" xml:space="preserve">
+    <value>8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c</value>
+  </data>
+  <data name="Settings_Default_IdleGuid" xml:space="preserve">
+    <value>381b4222-f694-41f0-9685-ff5bb260df2e</value>
+  </data>
+  <data name="Settings_Default_IdleName" xml:space="preserve">
+    <value>Balanced</value>
+  </data>
+  <data name="Settings_Default_PerformanceName" xml:space="preserve">
+    <value>High performance</value>
+  </data>
+  <data name="Program_Error_PerformanceSchemeNull" xml:space="preserve">
+    <value>Could not find the performance power plan specified in settings as
+"{0}", make sure it matches the name of the high performance plan 
+that you see in Windows power plan settings exactly.
+
+Once you have found the correct name, update the contents of the config file located at:
+{1}</value>
+  </data>
+  <data name="Program_Error_PerformanceSchemeNull_Title" xml:space="preserve">
+    <value>Could not find specified power plan</value>
+  </data>
+  <data name="Program_Error_IdleSchemeNull_Title" xml:space="preserve">
+    <value>Could not find specified power plan</value>
+  </data>
+  <data name="Program_Error_IdleSchemeNull" xml:space="preserve">
+    <value>Could not find the idle power plan specified in settings as
+"{0}", make sure it matches the name of the balanced plan 
+(or whatever plan you want to use) that you see in 
+Windows power plan settings exactly.
+
+Once you have found the correct name, update the 
+contents of the config file located at:
+{1}</value>
+  </data>
 </root>

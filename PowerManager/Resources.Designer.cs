@@ -69,5 +69,126 @@ namespace PowerManager {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find the idle power plan specified in settings as
+        ///&quot;{0}&quot;, make sure it matches the name of the balanced plan 
+        ///(or whatever plan you want to use) that you see in 
+        ///Windows power plan settings exactly.
+        ///
+        ///Once you have found the correct name, update the 
+        ///contents of the config file located at:
+        ///{1}.
+        /// </summary>
+        internal static string Program_Error_IdleSchemeNull {
+            get {
+                return ResourceManager.GetString("Program_Error_IdleSchemeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find specified power plan.
+        /// </summary>
+        internal static string Program_Error_IdleSchemeNull_Title {
+            get {
+                return ResourceManager.GetString("Program_Error_IdleSchemeNull_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find the performance power plan specified in settings as
+        ///&quot;{0}&quot;, make sure it matches the name of the high performance plan 
+        ///that you see in Windows power plan settings exactly.
+        ///
+        ///Once you have found the correct name, update the contents of the config file located at:
+        ///{1}.
+        /// </summary>
+        internal static string Program_Error_PerformanceSchemeNull {
+            get {
+                return ResourceManager.GetString("Program_Error_PerformanceSchemeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find specified power plan.
+        /// </summary>
+        internal static string Program_Error_PerformanceSchemeNull_Title {
+            get {
+                return ResourceManager.GetString("Program_Error_PerformanceSchemeNull_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to csgo,bf4,TslGame,bf5,bf1,bf2042,dayz,Rust.
+        /// </summary>
+        internal static string Settings_Default_Application {
+            get {
+                return ResourceManager.GetString("Settings_Default_Application", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 381b4222-f694-41f0-9685-ff5bb260df2e.
+        /// </summary>
+        internal static string Settings_Default_IdleGuid {
+            get {
+                return ResourceManager.GetString("Settings_Default_IdleGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Balanced.
+        /// </summary>
+        internal static string Settings_Default_IdleName {
+            get {
+                return ResourceManager.GetString("Settings_Default_IdleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c.
+        /// </summary>
+        internal static string Settings_Default_PerformanceGuid {
+            get {
+                return ResourceManager.GetString("Settings_Default_PerformanceGuid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High performance.
+        /// </summary>
+        internal static string Settings_Default_PerformanceName {
+            get {
+                return ResourceManager.GetString("Settings_Default_PerformanceName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to open config file in editor. Try opening the following file manually: 
+        ///.
+        /// </summary>
+        internal static string Settings_OpenInEditor_Error {
+            get {
+                return ResourceManager.GetString("Settings_OpenInEditor_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to open editor.
+        /// </summary>
+        internal static string Settings_OpenInEditor_Error_Title {
+            get {
+                return ResourceManager.GetString("Settings_OpenInEditor_Error_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found no valid settings, wrote template ones to file..
+        /// </summary>
+        internal static string Settings_Setup_NotFound {
+            get {
+                return ResourceManager.GetString("Settings_Setup_NotFound", resourceCulture);
+            }
+        }
     }
 }

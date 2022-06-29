@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Newtonsoft.Json;
 using PowerManager;
 
 // Read settings from file, or use default settings and write template
@@ -8,8 +7,11 @@ var settings = Settings.Setup();
 
 // Store applications in a case-insensitive hashset for faster lookups
 var applicationsSet = new HashSet<string>(
-    settings.Applications, 
+    settings.Applications ?? new List<string>(), 
     StringComparer.OrdinalIgnoreCase);
+
+if (settings.PerformancePlan == null || settings.IdlePlan == null)
+    throw new Exception("Performance and/or idle plan not set");
 
 // Find all power plans that exist (as of starting the application)
 var plans = new PowerSchemeCollection();
@@ -22,12 +24,13 @@ var idleScheme = plans.GetScheme(settings.IdlePlan);
 
 if (performanceScheme == null)
 {
-    MessageBox.Show($"Could not find the performance power plan specified in settings as\n" +
-                    $"\"{settings.PerformancePlan}\", make sure it matches the name of the\n" +
-                    $"high performance plan that you see in Windows power plan settings exactly.\n\n" +
-                    $"Once you have found the correct name, update the contents of the config file located at:\n" +
-                    Settings.SettingsFile,
-        "Could not find specified power plan",
+    MessageBox.Show(
+        text: string.Format(
+            Resources.Program_Error_PerformanceSchemeNull,
+            settings.PerformancePlan, 
+            Settings.SettingsFile
+        ),
+        caption: Resources.Program_Error_PerformanceSchemeNull_Title,
         MessageBoxButtons.OK,
         MessageBoxIcon.Exclamation);
 
@@ -36,13 +39,13 @@ if (performanceScheme == null)
 
 if (idleScheme == null)
 {
-    MessageBox.Show($"Could not find the idle power plan specified in settings as\n" +
-                    $"\"{settings.IdlePlan}\", make sure it matches the name of the\n" +
-                    $"balanced plan (or whatever plan you want to use) that you see in " +
-                    $"Windows power plan settings exactly.\n\n" +
-                    $"Once you have found the correct name, update the contents of the config file located at:\n" +
-                    Settings.SettingsFile,
-        "Could not find specified power plan",
+    MessageBox.Show(
+        text: string.Format(
+            Resources.Program_Error_IdleSchemeNull, 
+            settings.IdlePlan, 
+            Settings.SettingsFile
+        ),
+        caption: Resources.Program_Error_IdleSchemeNull_Title,
         MessageBoxButtons.OK,
         MessageBoxIcon.Exclamation);
 
@@ -51,6 +54,7 @@ if (idleScheme == null)
 
 // Create a tray icon with context menu
 var trayIcon = new TrayIcon(plans);
+trayIcon.Show();
 
 // Create a mutex to use to ensure updates don't run concurrently
 var mutex = new Mutex();
@@ -86,7 +90,7 @@ void Update()
         plans.Update();
         // New plan is the same as the old plan, no need to set it as active 
         // again or to update the collection
-        if (plans.ActiveGuid == preferredPlan.Guid)
+        if (plans.ActivePlanGuid == preferredPlan.Guid)
             return;
 
         plans.SetActive(preferredPlan);

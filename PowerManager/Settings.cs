@@ -14,17 +14,17 @@ public class Settings
     /// <summary>
     /// The list of applications to apply the performance plan for
     /// </summary>
-    public List<string> Applications { get; set; }
+    public List<string>? Applications { get; set; }
 
     /// <summary>
-    /// The plan to apply when an application from <param name="Applications">applications</param> is running.
+    /// The plan to apply when an application from <cref name="Applications">applications</cref> is running.
     /// </summary>
-    public string PerformancePlan { get; set; }
+    public PowerSchemeSettings? PerformancePlan { get; set; }
 
     /// <summary>
-    /// The plan to apply when no application from <param name="Applications">applications</param> is running.
+    /// The plan to apply when no application from <cref name="Applications">applications</cref> is running.
     /// </summary>
-    public string IdlePlan { get; set; }
+    public PowerSchemeSettings? IdlePlan { get; set; }
 
     /// <summary>
     /// How often the application should check running processes and update, in milliseconds
@@ -49,23 +49,28 @@ public class Settings
         catch (Exception e)
         {
             Console.WriteLine(e);
-            MessageBox.Show("Failed to open config file in editor. Try opening the following file manually: \n" + 
-                            SettingsFile, "Failed to open editor", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(Resources.Settings_OpenInEditor_Error + 
+                            SettingsFile, Resources.Settings_OpenInEditor_Error_Title, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
     
     /// <summary>
     /// Template settings to use as default
     /// </summary>
-    public static Settings TemplateSettings { get; } =
+    private static Settings TemplateSettings { get; } =
         new()
         {
-            Applications = new ()
+            Applications = new (Resources.Settings_Default_Application.Split(',')),
+            PerformancePlan = new ()
             {
-                "csgo"
+                Guid = Resources.Settings_Default_PerformanceGuid,
+                Name = Resources.Settings_Default_PerformanceName
             },
-            PerformancePlan = "High performance",
-            IdlePlan = "Balanced"
+            IdlePlan = new ()
+            {
+                Guid = Resources.Settings_Default_IdleGuid,
+                Name = Resources.Settings_Default_IdleName   
+            }
         };
 
     /// <summary>
@@ -85,7 +90,7 @@ public class Settings
         if (settings != null) 
             return settings;
         
-        Console.WriteLine("Found no valid settings, wrote template ones to file.");
+        Console.WriteLine(Resources.Settings_Setup_NotFound);
         settings = TemplateSettings;
         File.WriteAllText(SettingsFile, JsonConvert.SerializeObject(settings, Formatting.Indented));
 

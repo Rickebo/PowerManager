@@ -5,9 +5,9 @@ using static Vanara.PInvoke.PowrProf;
 public class PowerScheme
 {
     /// <summary>
-    /// A power plan collection to use to determine if current plan is active or not
+    /// A provider of the current active power plan to use to determine if the current plan is active
     /// </summary>
-    private readonly PowerSchemeCollection _collection;
+    private readonly IActivePowerPlanProvider _activePlanProvider;
 
     /// <summary>
     /// The name of the power plan
@@ -22,11 +22,12 @@ public class PowerScheme
     /// <summary>
     /// Creates a power plan using a specified power plan collection and guid
     /// </summary>
-    /// <param name="collection">The power plan collection to use</param>
+    /// <param name="activePlanProvider">The provider of active power plan to use for determining if the plan is active
+    /// or not</param>
     /// <param name="guid">The guid of the power plan to create</param>
-    public PowerScheme(PowerSchemeCollection collection, Guid guid)
+    public PowerScheme(IActivePowerPlanProvider activePlanProvider, Guid guid)
     {
-        _collection = collection;
+        _activePlanProvider = activePlanProvider;
         
         Guid = guid;
         Name = PowerReadFriendlyName(guid);
@@ -35,7 +36,7 @@ public class PowerScheme
     /// <summary>
     /// Whether or not the power plan is the currently active power plan
     /// </summary>
-    public bool IsActive => _collection.ActiveGuid == Guid;
+    public bool IsActive => _activePlanProvider.ActivePlanGuid == Guid;
     
     public override bool Equals(object? obj) =>
         obj is PowerScheme other &&

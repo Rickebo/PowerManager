@@ -54,9 +54,12 @@ public class TrayIcon
     /// <param name="schemeCollection"></param>
     public TrayIcon(PowerSchemeCollection schemeCollection)
     {
-        _schemeCollection = schemeCollection;
-        
+        _schemeCollection = schemeCollection;        
         _uiThread = new Thread(Run);
+    }
+
+    public void Show()
+    {
         _uiThread.Start();
     }
 

@@ -1,15 +1,16 @@
-﻿using Vanara.PInvoke;
+﻿using System.Diagnostics.CodeAnalysis;
+using Vanara.PInvoke;
 
 namespace PowerManager;
 
 using static Vanara.PInvoke.PowrProf;
 
-public class PowerSchemeCollection : Dictionary<Guid, PowerScheme>
+public class PowerSchemeCollection : Dictionary<Guid, PowerScheme>, IActivePowerPlanProvider
 {
     /// <summary>
     /// The Guid of the currently active power plan
     /// </summary>
-    public Guid ActiveGuid { get; private set; } 
+    public Guid ActivePlanGuid { get; private set; } 
     
     /// <summary>
     /// Creates and initializes a power scheme collection
@@ -28,7 +29,7 @@ public class PowerSchemeCollection : Dictionary<Guid, PowerScheme>
     public void Update()
     {
         PowerGetActiveScheme(out var active);
-        ActiveGuid = active;
+        ActivePlanGuid = active;
     }
 
     /// <summary>
@@ -50,7 +51,7 @@ public class PowerSchemeCollection : Dictionary<Guid, PowerScheme>
     /// </summary>
     /// <returns></returns>
     public PowerScheme GetActive() => 
-        this[ActiveGuid];
+        this[ActivePlanGuid];
     
     /// <summary>
     /// Gets a power plan based on it's name. Search is case insensitive.
@@ -59,4 +60,18 @@ public class PowerSchemeCollection : Dictionary<Guid, PowerScheme>
     /// <returns></returns>
     public PowerScheme? GetScheme(string name) => 
         Values.FirstOrDefault(scheme => scheme.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+
+    /// <summary>
+    /// Gets a power plan based on it's name. Search is case insensitive.
+    /// </summary>
+    /// <param name="schemeSettings">The settings of the power plan to find</param>
+    /// <returns>The power scheme, if found, otherwise, null</returns>
+    public PowerScheme? GetScheme(PowerSchemeSettings schemeSettings) =>
+        schemeSettings.Guid != null &&
+        schemeSettings.ParseGuid(out var parsedGuid) &&
+        TryGetValue(parsedGuid, out var foundScheme)
+            ? foundScheme
+            : schemeSettings.Name != null
+                ? GetScheme(schemeSettings.Name)
+                : null;
 }
