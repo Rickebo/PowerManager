@@ -170,4 +170,22 @@ Once you have found the correct name, update the
 contents of the config file located at:
 {1}</value>
   </data>
+  <data name="TrayIcon_CreateContextMenu_MenuTitle" xml:space="preserve">
+    <value>PowerManager</value>
+  </data>
+  <data name="TrayIcon_CreateContextMenu_OpenConfigItem" xml:space="preserve">
+    <value>Open config file</value>
+  </data>
+  <data name="TrayIcon_CreateContextMenu_ExitItem" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="TrayIcon_CreateContextMenu_CloseMenuItem" xml:space="preserve">
+    <value>Close this menu</value>
+  </data>
+  <data name="TrayIcon_CreateContextMenu_RestartPowerManagerItem" xml:space="preserve">
+    <value>Restart PowerManager</value>
+  </data>
+  <data name="TrayIcon_UpdateActivePowerPlan_ActivePlanItemText" xml:space="preserve">
+    <value>Active power plan: {0}</value>
+  </data>
 </root>

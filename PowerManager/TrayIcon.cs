@@ -12,6 +12,11 @@ public class TrayIcon
     private readonly Thread _uiThread;
 
     /// <summary>
+    /// Registry key containing startup keys for applications to run with windows
+    /// </summary>
+    private readonly RegistryKey? _startupKey;
+
+    /// <summary>
     /// The scheme collection used to find the currently active power plan
     /// </summary>
     private readonly PowerSchemeCollection _schemeCollection;
@@ -19,33 +24,33 @@ public class TrayIcon
     /// <summary>
     /// The tool strip menu item showing the currently active power plan
     /// </summary>
-    private ToolStripMenuItem ActivePlanItem { get; set; }
+    private ToolStripMenuItem? ActivePlanItem { get; set; }
 
     /// <summary>
     /// The tool strip menu item representing opening the config file
     /// </summary>
-    private ToolStripMenuItem OpenConfigItem { get; set; }
+    private ToolStripMenuItem? OpenConfigItem { get; set; }
 
     /// <summary>
     /// The tool strip menu item representing exiting the application
     /// </summary>
-    private ToolStripMenuItem ExitItem { get; set; }
+    private ToolStripMenuItem? ExitItem { get; set; }
 
     /// <summary>
     /// The tool strip menu item representing toggling whether or not the application
     /// starts with Windows
     /// </summary>
-    private ToolStripMenuItem AutoStartItem { get; set; }
+    private ToolStripMenuItem? AutoStartItem { get; set; }
 
     /// <summary>
     /// The tool strip menu item representing closing the context menu
     /// </summary>
-    private ToolStripMenuItem CloseMenuItem { get; set; }
+    private ToolStripMenuItem? CloseMenuItem { get; set; }
 
     /// <summary>
     /// The tool strip menu item representing restarting the application
     /// </summary>
-    private ToolStripMenuItem RestartItem { get; set; }
+    private ToolStripMenuItem? RestartItem { get; set; }
     
     
     /// <summary>
@@ -56,6 +61,9 @@ public class TrayIcon
     {
         _schemeCollection = schemeCollection;        
         _uiThread = new Thread(Run);
+        _startupKey = Registry.CurrentUser.OpenSubKey(
+            "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", 
+            true);
     }
 
     public void Show()
@@ -72,8 +80,8 @@ public class TrayIcon
         icon.Icon = Resources.icon;
         icon.ContextMenuStrip = CreateContextMenu();
         icon.Visible = true;
-        icon.Click += (s, a) => UpdateAll();
-        icon.MouseClick += (s, a) => UpdateAll();
+        icon.Click += (_, _) => UpdateAll();
+        icon.MouseClick += (_, _) => UpdateAll();
 
         Application.Run();
     }
@@ -86,43 +94,43 @@ public class TrayIcon
     {
         var menu = new ContextMenuStrip()
         { 
-            Text = "PowerManager"
+            Text = Resources.TrayIcon_CreateContextMenu_MenuTitle
         };
 
         OpenConfigItem = new ToolStripMenuItem()
         {
-            Text = "Open config file"
+            Text = Resources.TrayIcon_CreateContextMenu_OpenConfigItem
         };
 
-        OpenConfigItem.Click += (s, a) => Settings.OpenInEditor();
+        OpenConfigItem.Click += (_, _) => Settings.OpenInEditor();
 
         ExitItem = new ToolStripMenuItem()
         {
-            Text = "Exit"
+            Text = Resources.TrayIcon_CreateContextMenu_ExitItem
         };
 
-        ExitItem.Click += (s, a) => Environment.Exit(0);
+        ExitItem.Click += (_, _) => Environment.Exit(0);
 
         CloseMenuItem = new ToolStripMenuItem()
         {
-            Text = "Close this menu"
+            Text = Resources.TrayIcon_CreateContextMenu_CloseMenuItem
         };
 
         RestartItem = new ToolStripMenuItem()
         {
-            Text = "Restart PowerManager"
+            Text = Resources.TrayIcon_CreateContextMenu_RestartPowerManagerItem
         };
 
-        RestartItem.Click += (s, a) => Restart();
+        RestartItem.Click += (_, _) => Restart();
         
         ActivePlanItem = new ToolStripMenuItem();
         
         AutoStartItem = new ToolStripMenuItem();
-        AutoStartItem.Click += (s, a) => ToggleAutoStart();
+        AutoStartItem.Click += (_, _) => ToggleAutoStart();
 
         UpdateAll();
         
-        menu.Items.AddRange(new []
+        menu.Items.AddRange(new ToolStripItem[]
         {
             ActivePlanItem,
             CloseMenuItem,
@@ -155,6 +163,9 @@ public class TrayIcon
     /// </summary>
     private void UpdateAutoStart()
     {
+        if (AutoStartItem == null)
+            return;
+        
         AutoStartItem.Text = IsAutoLaunch 
             ? "Disable start with windows" 
             : "Start with windows";
@@ -165,7 +176,12 @@ public class TrayIcon
     /// </summary>
     private void UpdateActivePowerPlan()
     {
-        ActivePlanItem.Text = $"Active power plan: {_schemeCollection.GetActive().Name}";
+        if (ActivePlanItem == null)
+            return;
+        
+        ActivePlanItem.Text = string.Format(
+            Resources.TrayIcon_UpdateActivePowerPlan_ActivePlanItemText, 
+            _schemeCollection.GetActive().Name);
     }
 
     /// <summary>
@@ -190,28 +206,22 @@ public class TrayIcon
     /// The registry key to use for the application when setting it to start with windows
     /// </summary>
     private const string PowerManagerRegistryKey = "PowerManager";
-    
-    /// <summary>
-    /// Finds the registry key containing programs to start with windows
-    /// </summary>
-    /// <returns></returns>
-    private static RegistryKey GetStartupKey() => 
-        Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
     /// <summary>
     /// Whether or not the program is set to automatically launch with windows
     /// </summary>
-    public bool IsAutoLaunch => GetStartupKey().GetValue(PowerManagerRegistryKey) != null;
+    public bool IsAutoLaunch => 
+        _startupKey?.GetValue(PowerManagerRegistryKey) != null;
 
     /// <summary>
     /// Enables launching the program automatically with Windows
     /// </summary>
-    public void EnableAutoLaunch() => GetStartupKey()
-        .SetValue(PowerManagerRegistryKey, Application.ExecutablePath);
+    public void EnableAutoLaunch() => 
+        _startupKey?.SetValue(PowerManagerRegistryKey, Application.ExecutablePath);
     
     /// <summary>
     /// Disables launching the program automatically with Windows
     /// </summary>
-    public void DisableAutoLaunch() => GetStartupKey()
-        .DeleteValue(PowerManagerRegistryKey, false);
+    public void DisableAutoLaunch() => 
+        _startupKey? .DeleteValue(PowerManagerRegistryKey, false);
 }

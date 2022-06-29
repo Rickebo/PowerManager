@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Vanara.PInvoke;
+﻿using Vanara.PInvoke;
 
 namespace PowerManager;
 
-using static Vanara.PInvoke.PowrProf;
+using static PowrProf;
 
 public class PowerSchemeCollection : Dictionary<Guid, PowerScheme>, IActivePowerPlanProvider
 {

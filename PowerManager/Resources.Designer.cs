@@ -190,5 +190,59 @@ namespace PowerManager {
                 return ResourceManager.GetString("Settings_Setup_NotFound", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close this menu.
+        /// </summary>
+        internal static string TrayIcon_CreateContextMenu_CloseMenuItem {
+            get {
+                return ResourceManager.GetString("TrayIcon_CreateContextMenu_CloseMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string TrayIcon_CreateContextMenu_ExitItem {
+            get {
+                return ResourceManager.GetString("TrayIcon_CreateContextMenu_ExitItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerManager.
+        /// </summary>
+        internal static string TrayIcon_CreateContextMenu_MenuTitle {
+            get {
+                return ResourceManager.GetString("TrayIcon_CreateContextMenu_MenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open config file.
+        /// </summary>
+        internal static string TrayIcon_CreateContextMenu_OpenConfigItem {
+            get {
+                return ResourceManager.GetString("TrayIcon_CreateContextMenu_OpenConfigItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart PowerManager.
+        /// </summary>
+        internal static string TrayIcon_CreateContextMenu_RestartPowerManagerItem {
+            get {
+                return ResourceManager.GetString("TrayIcon_CreateContextMenu_RestartPowerManagerItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Active power plan: {0}.
+        /// </summary>
+        internal static string TrayIcon_UpdateActivePowerPlan_ActivePlanItemText {
+            get {
+                return ResourceManager.GetString("TrayIcon_UpdateActivePowerPlan_ActivePlanItemText", resourceCulture);
+            }
+        }
     }
 }
